@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { explain, fromJson, repair, validate } from "../index";
+import { explain, Flowchart, repair, validate } from "../index";
 import { brokenSequenceAlias, flowchartDocument } from "./fixtures";
 
 describe("vizlayer core", () => {
@@ -31,7 +31,7 @@ describe("vizlayer core", () => {
   });
 
   it("renders a flowchart from structured JSON", () => {
-    const result = fromJson(flowchartDocument);
+    const result = Flowchart.fromJson(flowchartDocument);
 
     expect(result).toContain("flowchart LR");
     expect(result).toContain("user[User]");

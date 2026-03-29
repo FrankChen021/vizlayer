@@ -1,6 +1,6 @@
 import {
-  fromJson,
   explain,
+  Flowchart,
   repair,
   validate,
   type FlowchartDocument,
@@ -153,7 +153,7 @@ function RepairDemoPage() {
 }
 
 function JsonDemoPage() {
-  const mermaid = useMemo(() => fromJson(demoDocument), []);
+  const mermaid = useMemo(() => Flowchart.fromJson(demoDocument), []);
 
   return (
     <section className="stack">
