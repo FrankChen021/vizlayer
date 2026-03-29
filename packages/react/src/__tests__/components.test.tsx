@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MermaidDiagram, VizlayerDiagram } from "../index";
+import { MermaidDiagram } from "../components/MermaidDiagram";
+import { VizlayerDiagram } from "../index";
 
 vi.mock("mermaid", () => ({
   default: {

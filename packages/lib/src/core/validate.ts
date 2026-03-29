@@ -1,6 +1,6 @@
-import { ClassDiagram } from "../diagrams/class/impl";
+import { ClassDiagram } from "../diagrams/classDiagram/impl";
 import { Flowchart } from "../diagrams/flowchart/impl";
-import { SequenceDiagram } from "../diagrams/sequence/impl";
+import { SequenceDiagram } from "../diagrams/sequenceDiagram/impl";
 import { detectKind, preprocessInput } from "./normalize";
 import type { Diagnostic, ValidateResult, VisualizationKind } from "./types";
 

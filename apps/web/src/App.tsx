@@ -9,11 +9,12 @@ import {
   type FlowchartDocument,
   type SequenceDiagramDocument,
 } from "@vizlayer/lib";
-import { MermaidDiagram, VizlayerDiagram } from "@vizlayer/react";
+import { VizlayerDiagram } from "@vizlayer/react";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { docs } from "virtual:docs-content";
+import { MermaidPreview } from "./components/MermaidPreview";
 
 const flowchartDocument: FlowchartDocument = {
   direction: "LR",
@@ -189,7 +190,7 @@ function RepairDemoPage() {
 
         <div className="stack">
           <h3>Preview</h3>
-          <MermaidDiagram chart={result.mermaid} />
+          <MermaidPreview chart={result.mermaid} />
         </div>
       </div>
     </section>

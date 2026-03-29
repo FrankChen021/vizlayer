@@ -8,7 +8,7 @@ This repository is organized as a small TypeScript workspace:
 - `packages/lib`: reusable visualization library
 - `packages/react`: React wrapper for rendering Vizlayer JSON and Mermaid
 - `docs`: markdown content rendered inside the demo app
-- `.cursor/skills`: project skills for Vizlayer JSON authoring and integration
+- `skills`: project skill for Vizlayer JSON authoring
 
 ## Goals
 

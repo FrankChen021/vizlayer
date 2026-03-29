@@ -1,9 +1,9 @@
 export { explain } from "./core/explain";
 export { repair } from "./core/repair";
 export { validate } from "./core/validate";
-export { ClassDiagram } from "./diagrams/class/impl";
+export { ClassDiagram } from "./diagrams/classDiagram/impl";
 export { Flowchart } from "./diagrams/flowchart/impl";
-export { SequenceDiagram } from "./diagrams/sequence/impl";
+export { SequenceDiagram } from "./diagrams/sequenceDiagram/impl";
 
 export type {
   Diagnostic,
@@ -22,9 +22,9 @@ export type {
   SequenceDiagramDocument,
   SequenceMessage,
   SequenceParticipant,
-} from "./diagrams/sequence/types";
+} from "./diagrams/sequenceDiagram/types";
 export type {
   ClassDiagramDocument,
   ClassMember,
   ClassRelation,
-} from "./diagrams/class/types";
+} from "./diagrams/classDiagram/types";
