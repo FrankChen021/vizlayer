@@ -1,4 +1,4 @@
-export type VisualizationKind = "flowchart" | "sequence" | "unknown";
+export type VisualizationKind = "flowchart" | "sequence" | "class" | "unknown";
 
 export type DiagnosticCode =
   | "EMPTY_INPUT"

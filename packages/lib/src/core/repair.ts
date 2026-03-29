@@ -1,5 +1,6 @@
-import { normalizeFlowchartMermaid } from "../diagrams/flowchart/impl";
-import { normalizeSequenceMermaid } from "../diagrams/sequence/impl";
+import { ClassDiagram } from "../diagrams/class/impl";
+import { Flowchart } from "../diagrams/flowchart/impl";
+import { SequenceDiagram } from "../diagrams/sequence/impl";
 import { detectKind, preprocessInput } from "./normalize";
 import { validate } from "./validate";
 import type { RepairResult, ResidualError } from "./types";
@@ -15,8 +16,10 @@ export function repair(input: string): RepairResult {
   const kind = detectKind(preprocessed.text);
   const normalized =
     kind === "sequence"
-      ? normalizeSequenceMermaid(preprocessed.text)
-      : normalizeFlowchartMermaid(preprocessed.text);
+      ? SequenceDiagram.normalizeMermaid(preprocessed.text)
+      : kind === "class"
+        ? ClassDiagram.normalizeMermaid(preprocessed.text)
+        : Flowchart.normalizeMermaid(preprocessed.text);
   const validation = validate(normalized.text);
 
   if (validation.ok) {

@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { explain, Flowchart, repair, validate } from "../index";
-import { brokenSequenceAlias, flowchartDocument } from "./fixtures";
+import {
+  ClassDiagram,
+  explain,
+  Flowchart,
+  repair,
+  SequenceDiagram,
+  validate,
+} from "../index";
+import {
+  brokenSequenceAlias,
+  classDiagramDocument,
+  flowchartDocument,
+  sequenceDocument,
+} from "./fixtures";
 
 describe("vizlayer core", () => {
   it("validates empty input as an error", () => {
@@ -36,6 +48,28 @@ describe("vizlayer core", () => {
     expect(result).toContain("flowchart LR");
     expect(result).toContain("user[User]");
     expect(result).toContain("user --> |send spec| engine");
+  });
+
+  it("renders a sequence diagram from structured JSON", () => {
+    const result = SequenceDiagram.fromJson(sequenceDocument);
+
+    expect(result).toContain("sequenceDiagram");
+    expect(result).toContain('participant engine as "Vizlayer Engine"');
+    expect(result).toContain("user->>engine: generate diagram");
+  });
+
+  it("renders a class diagram from structured JSON", () => {
+    const result = ClassDiagram.fromJson(classDiagramDocument);
+
+    expect(result).toContain("classDiagram");
+    expect(result).toContain("class PromptSpec {");
+    expect(result).toContain("PromptSpec --> DiagramArtifact : produces");
+  });
+
+  it("validates flowchart, sequence, and class Mermaid", () => {
+    expect(validate(Flowchart.fromJson(flowchartDocument)).ok).toBe(true);
+    expect(validate(SequenceDiagram.fromJson(sequenceDocument)).ok).toBe(true);
+    expect(validate(ClassDiagram.fromJson(classDiagramDocument)).ok).toBe(true);
   });
 
   it("explains repairs in plain language", () => {

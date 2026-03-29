@@ -1,9 +1,13 @@
 import {
+  ClassDiagram,
   explain,
   Flowchart,
   repair,
+  SequenceDiagram,
   validate,
+  type ClassDiagramDocument,
   type FlowchartDocument,
+  type SequenceDiagramDocument,
 } from "@vizlayer/lib";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -11,7 +15,7 @@ import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { docs } from "virtual:docs-content";
 import { MermaidPreview } from "./components/MermaidPreview";
 
-const demoDocument: FlowchartDocument = {
+const flowchartDocument: FlowchartDocument = {
   direction: "LR",
   nodes: [
     { id: "prompt", label: "Prompt" },
@@ -21,6 +25,42 @@ const demoDocument: FlowchartDocument = {
   edges: [
     { from: "prompt", to: "engine", label: "structured input" },
     { from: "engine", to: "output", label: "validated mermaid" },
+  ],
+};
+
+const sequenceDocument: SequenceDiagramDocument = {
+  participants: [
+    { id: "user", label: "User" },
+    { id: "engine", label: "Vizlayer Engine" },
+    { id: "renderer", label: "Mermaid Renderer" },
+  ],
+  messages: [
+    { from: "user", to: "engine", text: "describe diagram" },
+    { from: "engine", to: "renderer", text: "emit validated mermaid" },
+    { from: "renderer", to: "user", text: "return preview" },
+  ],
+};
+
+const classDocument: ClassDiagramDocument = {
+  classes: [
+    {
+      id: "VisualizationRequest",
+      members: [
+        { name: "kind", type: "string" },
+        { name: "payload", type: "object" },
+      ],
+    },
+    {
+      id: "VisualizationArtifact",
+      members: [{ name: "mermaid", type: "string" }],
+    },
+  ],
+  relations: [
+    {
+      from: "VisualizationRequest",
+      to: "VisualizationArtifact",
+      label: "produces",
+    },
   ],
 };
 
@@ -43,7 +83,9 @@ export function App() {
         <nav className="nav">
           <Link to="/">Overview</Link>
           <Link to="/demo/repair">Repair demo</Link>
-          <Link to="/demo/json">JSON demo</Link>
+          <Link to="/demo/flowchart">Flowchart demo</Link>
+          <Link to="/demo/sequence">Sequence demo</Link>
+          <Link to="/demo/class">Class demo</Link>
           <Link to="/docs">Docs</Link>
         </nav>
       </aside>
@@ -52,7 +94,9 @@ export function App() {
         <Routes>
           <Route path="/" element={<OverviewPage />} />
           <Route path="/demo/repair" element={<RepairDemoPage />} />
-          <Route path="/demo/json" element={<JsonDemoPage />} />
+          <Route path="/demo/flowchart" element={<FlowchartDemoPage />} />
+          <Route path="/demo/sequence" element={<SequenceDemoPage />} />
+          <Route path="/demo/class" element={<ClassDiagramDemoPage />} />
           <Route path="/docs" element={<DocsIndexPage />} />
           <Route path="/docs/:slug" element={<DocDetailPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -86,8 +130,8 @@ function OverviewPage() {
         <article className="panel">
           <h3>Emit from JSON</h3>
           <p>
-            Turn a constrained JSON contract into flowchart Mermaid for
-            downstream rendering.
+            Turn constrained diagram JSON into Mermaid across flowchart,
+            sequence, and class diagrams.
           </p>
         </article>
         <article className="panel">
@@ -152,8 +196,8 @@ function RepairDemoPage() {
   );
 }
 
-function JsonDemoPage() {
-  const mermaid = useMemo(() => Flowchart.fromJson(demoDocument), []);
+function FlowchartDemoPage() {
+  const mermaid = useMemo(() => Flowchart.fromJson(flowchartDocument), []);
 
   return (
     <section className="stack">
@@ -165,7 +209,65 @@ function JsonDemoPage() {
       <div className="two-column">
         <div className="panel">
           <h3>Structured input</h3>
-          <pre>{JSON.stringify(demoDocument, null, 2)}</pre>
+          <pre>{JSON.stringify(flowchartDocument, null, 2)}</pre>
+        </div>
+        <div className="panel">
+          <h3>Generated Mermaid</h3>
+          <pre>{mermaid}</pre>
+        </div>
+      </div>
+
+      <div className="stack">
+        <h3>Preview</h3>
+        <MermaidPreview chart={mermaid} />
+      </div>
+    </section>
+  );
+}
+
+function SequenceDemoPage() {
+  const mermaid = useMemo(() => SequenceDiagram.fromJson(sequenceDocument), []);
+
+  return (
+    <section className="stack">
+      <div>
+        <p className="eyebrow">Demo</p>
+        <h2>Emit Mermaid from sequence JSON</h2>
+      </div>
+
+      <div className="two-column">
+        <div className="panel">
+          <h3>Structured input</h3>
+          <pre>{JSON.stringify(sequenceDocument, null, 2)}</pre>
+        </div>
+        <div className="panel">
+          <h3>Generated Mermaid</h3>
+          <pre>{mermaid}</pre>
+        </div>
+      </div>
+
+      <div className="stack">
+        <h3>Preview</h3>
+        <MermaidPreview chart={mermaid} />
+      </div>
+    </section>
+  );
+}
+
+function ClassDiagramDemoPage() {
+  const mermaid = useMemo(() => ClassDiagram.fromJson(classDocument), []);
+
+  return (
+    <section className="stack">
+      <div>
+        <p className="eyebrow">Demo</p>
+        <h2>Emit Mermaid from class diagram JSON</h2>
+      </div>
+
+      <div className="two-column">
+        <div className="panel">
+          <h3>Structured input</h3>
+          <pre>{JSON.stringify(classDocument, null, 2)}</pre>
         </div>
         <div className="panel">
           <h3>Generated Mermaid</h3>

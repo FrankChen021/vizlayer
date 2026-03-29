@@ -1,4 +1,6 @@
 import type { FlowchartDocument } from "../diagrams/flowchart/types";
+import type { ClassDiagramDocument } from "../diagrams/class/types";
+import type { SequenceDiagramDocument } from "../diagrams/sequence/types";
 
 export const brokenSequenceAlias = {
   input: `sequenceDiagram
@@ -21,4 +23,32 @@ export const flowchartDocument: FlowchartDocument = {
     { from: "user", to: "engine", label: "send spec" },
     { from: "engine", to: "view", label: "emit mermaid" },
   ],
+};
+
+export const sequenceDocument: SequenceDiagramDocument = {
+  participants: [
+    { id: "user", label: "User" },
+    { id: "engine", label: "Vizlayer Engine" },
+  ],
+  messages: [
+    { from: "user", to: "engine", text: "generate diagram" },
+    { from: "engine", to: "user", text: "return mermaid" },
+  ],
+};
+
+export const classDiagramDocument: ClassDiagramDocument = {
+  classes: [
+    {
+      id: "PromptSpec",
+      members: [
+        { name: "id", type: "string" },
+        { name: "content", type: "string" },
+      ],
+    },
+    {
+      id: "DiagramArtifact",
+      members: [{ name: "mermaid", type: "string" }],
+    },
+  ],
+  relations: [{ from: "PromptSpec", to: "DiagramArtifact", label: "produces" }],
 };

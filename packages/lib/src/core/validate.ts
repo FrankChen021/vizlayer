@@ -1,5 +1,6 @@
-import { validateFlowchart } from "../diagrams/flowchart/impl";
-import { validateSequence } from "../diagrams/sequence/impl";
+import { ClassDiagram } from "../diagrams/class/impl";
+import { Flowchart } from "../diagrams/flowchart/impl";
+import { SequenceDiagram } from "../diagrams/sequence/impl";
 import { detectKind, preprocessInput } from "./normalize";
 import type { Diagnostic, ValidateResult, VisualizationKind } from "./types";
 
@@ -38,8 +39,12 @@ function buildDiagnostics(
   }
 
   if (kind === "sequence") {
-    return validateSequence(input);
+    return SequenceDiagram.validateMermaid(input);
   }
 
-  return validateFlowchart(input);
+  if (kind === "class") {
+    return ClassDiagram.validateMermaid(input);
+  }
+
+  return Flowchart.validateMermaid(input);
 }

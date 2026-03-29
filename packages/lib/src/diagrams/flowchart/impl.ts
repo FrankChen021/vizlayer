@@ -64,21 +64,6 @@ export class Flowchart {
   }
 }
 
-export function normalizeFlowchartMermaid(input: string) {
-  return Flowchart.normalizeMermaid(input);
-}
-
-export function validateFlowchart(input: string): Diagnostic[] {
-  return Flowchart.validateMermaid(input);
-}
-
-export function fromFlowchartJson(
-  input: FlowchartDocument,
-  kind: "flowchart" = "flowchart"
-) {
-  return Flowchart.fromJson(input, kind);
-}
-
 function escapeLabel(label: string) {
   return label.replaceAll("[", "(").replaceAll("]", ")");
 }

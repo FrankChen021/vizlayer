@@ -1,10 +1,9 @@
 export { explain } from "./core/explain";
 export { repair } from "./core/repair";
 export { validate } from "./core/validate";
-export {
-  Flowchart,
-  fromFlowchartJson as fromJson,
-} from "./diagrams/flowchart/impl";
+export { ClassDiagram } from "./diagrams/class/impl";
+export { Flowchart } from "./diagrams/flowchart/impl";
+export { SequenceDiagram } from "./diagrams/sequence/impl";
 
 export type {
   Diagnostic,

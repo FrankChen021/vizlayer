@@ -49,6 +49,10 @@ export function detectKind(input: string): VisualizationKind {
     return "sequence";
   }
 
+  if (firstMeaningfulLine.startsWith("classDiagram")) {
+    return "class";
+  }
+
   return "unknown";
 }
 
