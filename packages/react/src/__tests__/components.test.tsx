@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { MermaidDiagram } from "../components/MermaidDiagram";
-import { VizlayerDiagram } from "../index";
+import { toChartSpec, VizlayerDiagram } from "../index";
 
 vi.mock("mermaid", () => ({
   default: {
@@ -55,7 +55,7 @@ describe("@vizlayer/react", () => {
   it("renders sequence and class JSON through the generic component", async () => {
     const { container, rerender } = render(
       <VizlayerDiagram
-        kind="sequence"
+        kind="sequenceDiagram"
         document={{
           participants: [
             { id: "user", label: "User" },
@@ -77,7 +77,7 @@ describe("@vizlayer/react", () => {
 
     rerender(
       <VizlayerDiagram
-        kind="class"
+        kind="classDiagram"
         document={{
           classes: [
             { id: "Artifact", members: [{ name: "mermaid", type: "string" }] },
@@ -99,12 +99,46 @@ describe("@vizlayer/react", () => {
   it("surfaces invalid diagram JSON before Mermaid render", () => {
     render(
       <VizlayerDiagram
-        kind="sequence"
+        kind="sequenceDiagram"
         document={{ participants: [], messages: [] }}
         invalidDocumentFallback={(message) => <div>{message}</div>}
       />
     );
 
     expect(screen.getByText("INVALID_JSON_SHAPE")).toBeTruthy();
+  });
+
+  it("builds Mermaid text without rendering through the helper", () => {
+    const chart = toChartSpec({
+      kind: "flowchart",
+      document: {
+        direction: "LR",
+        nodes: [
+          { id: "user", label: "User" },
+          { id: "engine", label: "Vizlayer" },
+        ],
+        edges: [{ from: "user", to: "engine", label: "describe" }],
+      },
+    });
+
+    expect(chart).toContain("flowchart LR");
+    expect(chart).toContain("user --> |describe| engine");
+  });
+
+  it("builds Mermaid text from unified vizlayer payloads", () => {
+    const chart = toChartSpec({
+      kind: "sequenceDiagram",
+      document: {
+        participants: [
+          { id: "user", label: "User" },
+          { id: "engine", label: "Vizlayer Engine" },
+        ],
+        messages: [{ from: "user", to: "engine", text: "draw sequence" }],
+      },
+    });
+
+    expect(chart).toContain("sequenceDiagram");
+    expect(chart).toContain('participant engine as "Vizlayer Engine"');
+    expect(chart).toContain("user->>engine: draw sequence");
   });
 });

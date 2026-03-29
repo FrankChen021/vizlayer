@@ -1,10 +1,8 @@
 import {
-  ClassDiagram as ClassDiagramModel,
+  ClassDiagram,
   Flowchart,
-  SequenceDiagram as SequenceDiagramModel,
-  type ClassDiagramDocument,
-  type FlowchartDocument,
-  type SequenceDiagramDocument,
+  SequenceDiagram,
+  type VizlayerPayload,
 } from "@vizlayer/core";
 import { useMemo, type ReactNode } from "react";
 import { MermaidDiagram, type MermaidDiagramProps } from "./MermaidDiagram";
@@ -13,19 +11,7 @@ type SharedDiagramProps = Omit<MermaidDiagramProps, "chart"> & {
   invalidDocumentFallback?: ReactNode | ((message: string) => ReactNode);
 };
 
-export type VizlayerDiagramProps =
-  | ({
-      kind: "flowchart";
-      document: FlowchartDocument;
-    } & SharedDiagramProps)
-  | ({
-      kind: "sequence";
-      document: SequenceDiagramDocument;
-    } & SharedDiagramProps)
-  | ({
-      kind: "class";
-      document: ClassDiagramDocument;
-    } & SharedDiagramProps);
+export type VizlayerDiagramProps = VizlayerPayload & SharedDiagramProps;
 
 type BuildChartResult =
   | {
@@ -40,7 +26,10 @@ type BuildChartResult =
 export function VizlayerDiagram(props: VizlayerDiagramProps) {
   const chart = useMemo<BuildChartResult>(() => {
     try {
-      return buildChart(props);
+      return {
+        chart: toChartSpec(props),
+        error: null,
+      };
     } catch (error) {
       return {
         chart: null,
@@ -80,23 +69,14 @@ export function VizlayerDiagram(props: VizlayerDiagramProps) {
   );
 }
 
-function buildChart(props: VizlayerDiagramProps): BuildChartResult {
+export function toChartSpec(props: VizlayerPayload) {
   if (props.kind === "flowchart") {
-    return {
-      chart: Flowchart.fromJson(props.document),
-      error: null,
-    };
+    return Flowchart.fromJson(props.document);
   }
 
-  if (props.kind === "sequence") {
-    return {
-      chart: SequenceDiagramModel.fromJson(props.document),
-      error: null,
-    };
+  if (props.kind === "sequenceDiagram") {
+    return SequenceDiagram.fromJson(props.document);
   }
 
-  return {
-    chart: ClassDiagramModel.fromJson(props.document),
-    error: null,
-  };
+  return ClassDiagram.fromJson(props.document);
 }

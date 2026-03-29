@@ -4,13 +4,16 @@ Use this reference when the requested structure is temporal: actors, participant
 
 ## Schema
 
-```vizlayer-sequence-diagram
+```vizlayer
 {
-  "participants": [
-    { "id": "user", "label": "User" },
-    { "id": "engine", "label": "Vizlayer Engine" }
-  ],
-  "messages": [{ "from": "user", "to": "engine", "text": "draw diagram" }]
+  "kind": "sequenceDiagram",
+  "document": {
+    "participants": [
+      { "id": "user", "label": "User" },
+      { "id": "engine", "label": "Vizlayer Engine" }
+    ],
+    "messages": [{ "from": "user", "to": "engine", "text": "draw diagram" }]
+  }
 }
 ```
 
@@ -27,6 +30,7 @@ Use this reference when the requested structure is temporal: actors, participant
 - Keep `messages[].text` short and action-oriented.
 - Order messages in the same order they happen.
 - Prefer one participant entry per actor instead of repeating labels in messages.
+- In final answers, prefer the unified `vizlayer` code fence with `kind: "sequenceDiagram"`.
 
 ## Example
 
@@ -36,18 +40,21 @@ Prompt:
 
 Output:
 
-```vizlayer-sequence-diagram
+```vizlayer
 {
-  "participants": [
-    { "id": "user", "label": "User" },
-    { "id": "agent", "label": "AI Agent" },
-    { "id": "vizlayer", "label": "Vizlayer" }
-  ],
-  "messages": [
-    { "from": "user", "to": "agent", "text": "request architecture diagram" },
-    { "from": "agent", "to": "vizlayer", "text": "build flowchart JSON" },
-    { "from": "vizlayer", "to": "agent", "text": "return Mermaid" }
-  ]
+  "kind": "sequenceDiagram",
+  "document": {
+    "participants": [
+      { "id": "user", "label": "User" },
+      { "id": "agent", "label": "AI Agent" },
+      { "id": "vizlayer", "label": "Vizlayer" }
+    ],
+    "messages": [
+      { "from": "user", "to": "agent", "text": "request architecture diagram" },
+      { "from": "agent", "to": "vizlayer", "text": "build flowchart JSON" },
+      { "from": "vizlayer", "to": "agent", "text": "return Mermaid" }
+    ]
+  }
 }
 ```
 
@@ -56,3 +63,6 @@ Output:
 - Returning `messages` without defining the corresponding participants
 - Using paragraphs or multiple clauses in one message
 - Encoding branches or graph topology that should be a flowchart instead
+- Wrapping the payload in `json` instead of `vizlayer`
+- Renaming `messages[].text` to `label`
+- Omitting the top-level `kind` or `document` fields in the unified payload

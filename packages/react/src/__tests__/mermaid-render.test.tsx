@@ -43,7 +43,8 @@ const unknownTableRootCauseFlowchart = {
 };
 
 function ensureSvgGetBBox() {
-  const svgElementPrototype = SVGElement.prototype as SVGElementPrototypeWithGetBBox;
+  const svgElementPrototype =
+    SVGElement.prototype as SVGElementPrototypeWithGetBBox;
   svgElementPrototype.getBBox ??= () =>
     ({
       x: 0,

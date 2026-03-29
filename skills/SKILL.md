@@ -1,6 +1,9 @@
 ---
-name: vizlayer-json-authoring
-description: Produce valid Vizlayer JSON documents for flowchart, sequenceDiagram, and classDiagram diagrams. Use when an AI system needs to turn natural-language structure into Vizlayer diagram input, Mermaid-safe JSON, or typed visualization payloads.
+name: vizlayer
+description: Produce valid JSON documents for mermaid flowchart, sequenceDiagram, and classDiagram diagrams. Use when an AI system needs to turn natural-language structure into mermaid diagram input, Mermaid-safe JSON, or typed visualization payloads.
+metadata:
+  author: System
+  disable-slash-command: true
 ---
 
 # Vizlayer JSON Authoring
@@ -17,13 +20,13 @@ If the user asks for another diagram family, do not improvise a near-match silen
 
 ## Core Rule
 
-Prefer returning a diagram document payload instead of hand-writing Mermaid.
+Prefer returning a Vizlayer payload instead of hand-writing Mermaid.
 
 Good targets:
 
-- a flowchart document payload
-- a sequence diagram document payload
-- a class diagram document payload
+- a `vizlayer` payload with `kind: "flowchart"`
+- a `vizlayer` payload with `kind: "sequenceDiagram"`
+- a `vizlayer` payload with `kind: "classDiagram"`
 
 Note:
 
@@ -47,13 +50,35 @@ Choose the diagram family by relationship shape:
 
 ## Output Style
 
-When the user wants only the payload, return only the JSON document.
+When the user wants only the payload, return only the Vizlayer payload and use the `vizlayer` code fence so clients can render it directly.
+
+Fence rules:
+
+- Use ```vizlayer for final diagram answers.
+- Put the selected diagram family in the top-level `kind` field.
+- Put the diagram-specific document in the top-level `document` field.
+- Do not use ```json for final diagram answers when the client is expected to render the output as a diagram.
 
 When explanation is useful, use this format:
 
 1. State the chosen diagram family.
-2. Provide the JSON.
+2. Provide the payload in the `vizlayer` code fence.
 3. Optionally note why that family fits.
+
+Canonical payload shape:
+
+```vizlayer
+{
+  "kind": "sequenceDiagram",
+  "document": {
+    "participants": [
+      { "id": "user", "label": "User" },
+      { "id": "agent", "label": "AI Agent" }
+    ],
+    "messages": [{ "from": "user", "to": "agent", "text": "request diagram" }]
+  }
+}
+```
 
 ## Common Conversions
 

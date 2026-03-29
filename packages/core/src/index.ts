@@ -4,6 +4,7 @@ export { validate } from "./core/validate";
 export { ClassDiagram } from "./diagrams/classDiagram/impl";
 export { Flowchart } from "./diagrams/flowchart/impl";
 export { SequenceDiagram } from "./diagrams/sequenceDiagram/impl";
+export { VizlayerSpecParser } from "./vizlayer-spec";
 
 export type {
   Diagnostic,
@@ -28,3 +29,4 @@ export type {
   ClassMember,
   ClassRelation,
 } from "./diagrams/classDiagram/types";
+export type { ParsedVizlayerSpec, VizlayerPayload } from "./vizlayer-spec";

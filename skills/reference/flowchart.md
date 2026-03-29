@@ -4,14 +4,17 @@ Use this reference when the requested structure is directional: pipelines, branc
 
 ## Schema
 
-```vizlayer-flowchart
+```vizlayer
 {
-  "direction": "LR",
-  "nodes": [
-    { "id": "user", "label": "User" },
-    { "id": "engine", "label": "Vizlayer" }
-  ],
-  "edges": [{ "from": "user", "to": "engine", "label": "describe diagram" }]
+  "kind": "flowchart",
+  "document": {
+    "direction": "LR",
+    "nodes": [
+      { "id": "user", "label": "User" },
+      { "id": "engine", "label": "Vizlayer" }
+    ],
+    "edges": [{ "from": "user", "to": "engine", "label": "describe diagram" }]
+  }
 }
 ```
 
@@ -28,6 +31,7 @@ Use this reference when the requested structure is directional: pipelines, branc
 - Put human-readable text in `label`, not `id`.
 - Use `edges[].label` only when the transition meaning matters.
 - Prefer `LR` for left-to-right process diagrams and `TD` or `TB` for top-down flows.
+- In final answers, prefer the unified `vizlayer` code fence with `kind: "flowchart"`.
 
 ## Example
 
@@ -37,18 +41,21 @@ Prompt:
 
 Output:
 
-```vizlayer-flowchart
+```vizlayer
 {
-  "direction": "LR",
-  "nodes": [
-    { "id": "pm", "label": "Product Manager" },
-    { "id": "engine", "label": "AI Engine" },
-    { "id": "diagram", "label": "Rendered Diagram" }
-  ],
-  "edges": [
-    { "from": "pm", "to": "engine", "label": "send spec" },
-    { "from": "engine", "to": "diagram", "label": "return output" }
-  ]
+  "kind": "flowchart",
+  "document": {
+    "direction": "LR",
+    "nodes": [
+      { "id": "pm", "label": "Product Manager" },
+      { "id": "engine", "label": "AI Engine" },
+      { "id": "diagram", "label": "Rendered Diagram" }
+    ],
+    "edges": [
+      { "from": "pm", "to": "engine", "label": "send spec" },
+      { "from": "engine", "to": "diagram", "label": "return output" }
+    ]
+  }
 }
 ```
 
@@ -57,3 +64,5 @@ Output:
 - Leaving `nodes` empty
 - Referencing `from` or `to` IDs that are not declared in `nodes`
 - Putting paragraphs into `label` instead of concise titles
+- Wrapping the payload in `json` instead of `vizlayer`
+- Omitting the top-level `kind` or `document` fields in the unified payload

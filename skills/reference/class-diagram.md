@@ -4,24 +4,27 @@ Use this reference when the requested structure is structural: entities, members
 
 ## Schema
 
-```vizlayer-class-diagram
+```vizlayer
 {
-  "classes": [
-    {
-      "id": "VisualizationRequest",
-      "members": [
-        { "name": "kind", "type": "string" },
-        { "name": "payload", "type": "object" }
-      ]
-    }
-  ],
-  "relations": [
-    {
-      "from": "VisualizationRequest",
-      "to": "VisualizationArtifact",
-      "label": "produces"
-    }
-  ]
+  "kind": "classDiagram",
+  "document": {
+    "classes": [
+      {
+        "id": "VisualizationRequest",
+        "members": [
+          { "name": "kind", "type": "string" },
+          { "name": "payload", "type": "object" }
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "from": "VisualizationRequest",
+        "to": "VisualizationArtifact",
+        "label": "produces"
+      }
+    ]
+  }
 }
 ```
 
@@ -39,6 +42,7 @@ Use this reference when the requested structure is structural: entities, members
 - Keep `id` singular and code-friendly.
 - Put data shape into `members`.
 - Use `relations` only when the relationship adds useful structure.
+- In final answers, prefer the unified `vizlayer` code fence with `kind: "classDiagram"`.
 
 ## Example
 
@@ -48,27 +52,30 @@ Prompt:
 
 Output:
 
-```vizlayer-class-diagram
+```vizlayer
 {
-  "classes": [
-    {
-      "id": "DiagramRequest",
-      "members": [
-        { "name": "kind", "type": "string" },
-        { "name": "document", "type": "object" }
-      ]
-    },
-    {
-      "id": "DiagramArtifact",
-      "members": [
-        { "name": "mermaid", "type": "string" },
-        { "name": "svg", "type": "string" }
-      ]
-    }
-  ],
-  "relations": [
-    { "from": "DiagramRequest", "to": "DiagramArtifact", "label": "produces" }
-  ]
+  "kind": "classDiagram",
+  "document": {
+    "classes": [
+      {
+        "id": "DiagramRequest",
+        "members": [
+          { "name": "kind", "type": "string" },
+          { "name": "document", "type": "object" }
+        ]
+      },
+      {
+        "id": "DiagramArtifact",
+        "members": [
+          { "name": "mermaid", "type": "string" },
+          { "name": "svg", "type": "string" }
+        ]
+      }
+    ],
+    "relations": [
+      { "from": "DiagramRequest", "to": "DiagramArtifact", "label": "produces" }
+    ]
+  }
 }
 ```
 
@@ -77,3 +84,5 @@ Output:
 - Using class diagrams for workflows that should be flowcharts
 - Omitting `classes` and only returning `relations`
 - Treating `members` like free-form text instead of structured fields
+- Wrapping the payload in `json` instead of `vizlayer`
+- Omitting the top-level `kind` or `document` fields in the unified payload
