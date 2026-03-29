@@ -1,4 +1,4 @@
-import type { RepairResult } from "../types/results";
+import type { RepairResult } from "./types";
 
 export function explain(result: RepairResult) {
   if (result.ok && result.fixes.length === 0) {

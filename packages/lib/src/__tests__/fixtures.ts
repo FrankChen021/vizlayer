@@ -1,4 +1,4 @@
-import type { FlowchartDocument } from "../types/results";
+import type { FlowchartDocument } from "../diagrams/flowchart/types";
 
 export const brokenSequenceAlias = {
   input: `sequenceDiagram

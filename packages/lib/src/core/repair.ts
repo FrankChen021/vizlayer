@@ -1,10 +1,8 @@
-import {
-  detectKind,
-  normalizeMermaidChart,
-  preprocessInput,
-} from "./normalize";
+import { normalizeFlowchartMermaid } from "../diagrams/flowchart/impl";
+import { normalizeSequenceMermaid } from "../diagrams/sequence/impl";
+import { detectKind, preprocessInput } from "./normalize";
 import { validate } from "./validate";
-import type { RepairResult, ResidualError } from "../types/results";
+import type { RepairResult, ResidualError } from "./types";
 
 /**
  * Repair pipeline
@@ -15,7 +13,10 @@ import type { RepairResult, ResidualError } from "../types/results";
 export function repair(input: string): RepairResult {
   const preprocessed = preprocessInput(input);
   const kind = detectKind(preprocessed.text);
-  const normalized = normalizeMermaidChart(preprocessed.text, kind);
+  const normalized =
+    kind === "sequence"
+      ? normalizeSequenceMermaid(preprocessed.text)
+      : normalizeFlowchartMermaid(preprocessed.text);
   const validation = validate(normalized.text);
 
   if (validation.ok) {
