@@ -14,6 +14,6 @@ pnpm dev
 
 ## Workspace structure
 
-- `packages/lib`: the core engine
+- `packages/core`: the core engine
 - `apps/web`: demos and compiled docs
 - `docs`: markdown content rendered by the web app

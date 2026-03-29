@@ -5,7 +5,7 @@ Vizlayer is a structured visualization engine for AI systems.
 ## Repository Layout
 
 - `apps/web`: Vite React application that hosts demos and rendered docs pages
-- `packages/lib`: reusable TypeScript library for structured visualization primitives
+- `packages/core`: reusable TypeScript library for structured visualization primitives
 - `docs`: markdown content compiled into the web application at build time
 
 ## Working Rules
@@ -13,7 +13,7 @@ Vizlayer is a structured visualization engine for AI systems.
 - Prefer the smallest change that keeps the workspace coherent.
 - Keep the library pure where possible; browser-only rendering belongs in `apps/web`.
 - Treat docs as source content, not a separate site.
-- Preserve clear boundaries between `packages/lib` and `apps/web`.
+- Preserve clear boundaries between `packages/core` and `apps/web`.
 
 ## Commands
 

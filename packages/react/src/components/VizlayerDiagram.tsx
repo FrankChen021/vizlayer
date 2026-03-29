@@ -5,7 +5,7 @@ import {
   type ClassDiagramDocument,
   type FlowchartDocument,
   type SequenceDiagramDocument,
-} from "@vizlayer/lib";
+} from "@vizlayer/core";
 import { useMemo, type ReactNode } from "react";
 import { MermaidDiagram, type MermaidDiagramProps } from "./MermaidDiagram";
 

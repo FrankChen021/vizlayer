@@ -8,7 +8,7 @@ import {
   type ClassDiagramDocument,
   type FlowchartDocument,
   type SequenceDiagramDocument,
-} from "@vizlayer/lib";
+} from "@vizlayer/core";
 import { VizlayerDiagram } from "@vizlayer/react";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -114,7 +114,7 @@ function OverviewPage() {
         <p className="eyebrow">Overview</p>
         <h2>One library, one demo app, one docs surface.</h2>
         <p className="muted">
-          Vizlayer keeps transformation logic in `packages/lib`, ships ready
+          Vizlayer keeps transformation logic in `packages/core`, ships ready
           React wrappers from `packages/react`, and uses this app to show both
           layers together.
         </p>

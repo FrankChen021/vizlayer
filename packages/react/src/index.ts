@@ -7,4 +7,4 @@ export type {
   ClassDiagramDocument,
   FlowchartDocument,
   SequenceDiagramDocument,
-} from "@vizlayer/lib";
+} from "@vizlayer/core";

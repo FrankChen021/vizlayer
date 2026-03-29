@@ -4,7 +4,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@vizlayer/lib": ["../lib/src/index.ts"]
+      "@vizlayer/core": ["../core/src/index.ts"]
     }
   },
   "include": ["src"]

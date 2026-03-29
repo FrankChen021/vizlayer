@@ -15,11 +15,11 @@ export class Flowchart {
     const lines = [`flowchart ${direction}`];
 
     for (const node of input.nodes) {
-      lines.push(`  ${node.id}[${escapeLabel(node.label)}]`);
+      lines.push(`  ${node.id}["${escapeNodeLabel(node.label)}"]`);
     }
 
     for (const edge of input.edges) {
-      const label = edge.label ? `|${escapeLabel(edge.label)}| ` : "";
+      const label = edge.label ? `|${escapeEdgeLabel(edge.label)}| ` : "";
       lines.push(`  ${edge.from} --> ${label}${edge.to}`);
     }
 
@@ -64,6 +64,21 @@ export class Flowchart {
   }
 }
 
-function escapeLabel(label: string) {
-  return label.replaceAll("[", "(").replaceAll("]", ")");
+function escapeNodeLabel(label: string) {
+  return sanitizeLabel(label).replaceAll('"', '\\"');
+}
+
+function escapeEdgeLabel(label: string) {
+  return sanitizeLabel(label).replaceAll("|", "&#124;");
+}
+
+function sanitizeLabel(label: string) {
+  return label
+    .replaceAll("\\", "\\\\")
+    .replaceAll("[", "(")
+    .replaceAll("]", ")")
+    .replaceAll("(", "&#40;")
+    .replaceAll(")", "&#41;")
+    .replaceAll("\r\n", "<br/>")
+    .replaceAll("\n", "<br/>");
 }

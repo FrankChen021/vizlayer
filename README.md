@@ -5,7 +5,7 @@ Vizlayer is a structured visualization engine for AI systems.
 This repository is organized as a small TypeScript workspace:
 
 - `apps/web`: React + Vite demo application, designed for Cloudflare Pages
-- `packages/lib`: reusable visualization library
+- `packages/core`: reusable visualization library
 - `packages/react`: React wrapper for rendering Vizlayer JSON and Mermaid
 - `docs`: markdown content rendered inside the demo app
 - `skills`: project skill for Vizlayer JSON authoring
@@ -25,8 +25,8 @@ pnpm dev
 
 ## Packages
 
-- `@vizlayer/lib`: class-style JSON-to-Mermaid generation, repair, and validation
-- `@vizlayer/react`: `VizlayerDiagram` for JSON-driven rendering and `MermaidDiagram` for raw Mermaid text
+- `@vizlayer/core`: class-style JSON-to-Mermaid generation, repair, and validation
+- `@vizlayer/react`: `VizlayerDiagram` for JSON-driven rendering
 
 ## Workspace Scripts
 
