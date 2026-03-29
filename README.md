@@ -6,7 +6,9 @@ This repository is organized as a small TypeScript workspace:
 
 - `apps/web`: React + Vite demo application, designed for Cloudflare Pages
 - `packages/lib`: reusable visualization library
+- `packages/react`: React wrapper for rendering Vizlayer JSON and Mermaid
 - `docs`: markdown content rendered inside the demo app
+- `.cursor/skills`: project skills for Vizlayer JSON authoring and integration
 
 ## Goals
 
@@ -20,6 +22,11 @@ This repository is organized as a small TypeScript workspace:
 pnpm install
 pnpm dev
 ```
+
+## Packages
+
+- `@vizlayer/lib`: class-style JSON-to-Mermaid generation, repair, and validation
+- `@vizlayer/react`: `VizlayerDiagram` for JSON-driven rendering and `MermaidDiagram` for raw Mermaid text
 
 ## Workspace Scripts
 

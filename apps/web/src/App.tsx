@@ -1,19 +1,19 @@
 import {
-  ClassDiagram,
+  ClassDiagram as ClassDiagramModel,
   explain,
   Flowchart,
   repair,
-  SequenceDiagram,
+  SequenceDiagram as SequenceDiagramModel,
   validate,
   type ClassDiagramDocument,
   type FlowchartDocument,
   type SequenceDiagramDocument,
 } from "@vizlayer/lib";
+import { MermaidDiagram, VizlayerDiagram } from "@vizlayer/react";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { docs } from "virtual:docs-content";
-import { MermaidPreview } from "./components/MermaidPreview";
 
 const flowchartDocument: FlowchartDocument = {
   direction: "LR",
@@ -113,9 +113,9 @@ function OverviewPage() {
         <p className="eyebrow">Overview</p>
         <h2>One library, one demo app, one docs surface.</h2>
         <p className="muted">
-          Vizlayer keeps the core transformation logic in `packages/lib` and
-          uses this app to show what the engine does with Mermaid text and
-          structured flowchart JSON.
+          Vizlayer keeps transformation logic in `packages/lib`, ships ready
+          React wrappers from `packages/react`, and uses this app to show both
+          layers together.
         </p>
       </div>
 
@@ -189,7 +189,7 @@ function RepairDemoPage() {
 
         <div className="stack">
           <h3>Preview</h3>
-          <MermaidPreview chart={result.mermaid} />
+          <MermaidDiagram chart={result.mermaid} />
         </div>
       </div>
     </section>
@@ -219,14 +219,17 @@ function FlowchartDemoPage() {
 
       <div className="stack">
         <h3>Preview</h3>
-        <MermaidPreview chart={mermaid} />
+        <VizlayerDiagram kind="flowchart" document={flowchartDocument} />
       </div>
     </section>
   );
 }
 
 function SequenceDemoPage() {
-  const mermaid = useMemo(() => SequenceDiagram.fromJson(sequenceDocument), []);
+  const mermaid = useMemo(
+    () => SequenceDiagramModel.fromJson(sequenceDocument),
+    []
+  );
 
   return (
     <section className="stack">
@@ -248,14 +251,14 @@ function SequenceDemoPage() {
 
       <div className="stack">
         <h3>Preview</h3>
-        <MermaidPreview chart={mermaid} />
+        <VizlayerDiagram kind="sequence" document={sequenceDocument} />
       </div>
     </section>
   );
 }
 
 function ClassDiagramDemoPage() {
-  const mermaid = useMemo(() => ClassDiagram.fromJson(classDocument), []);
+  const mermaid = useMemo(() => ClassDiagramModel.fromJson(classDocument), []);
 
   return (
     <section className="stack">
@@ -277,7 +280,7 @@ function ClassDiagramDemoPage() {
 
       <div className="stack">
         <h3>Preview</h3>
-        <MermaidPreview chart={mermaid} />
+        <VizlayerDiagram kind="class" document={classDocument} />
       </div>
     </section>
   );

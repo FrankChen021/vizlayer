@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@vizlayer/lib": "workspace:*",
-    "mermaid": "^11.12.0",
+    "@vizlayer/react": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
