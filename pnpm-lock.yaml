@@ -84,7 +84,7 @@ importers:
   packages/react:
     dependencies:
       "@vizlayer/core":
-        specifier: ^0.1.2
+        specifier: ^0.1.3
         version: link:../core
       mermaid:
         specifier: ^11.12.0

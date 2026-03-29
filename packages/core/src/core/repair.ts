@@ -16,10 +16,10 @@ export function repair(input: string): RepairResult {
   const kind = detectKind(preprocessed.text);
   const normalized =
     kind === "sequence"
-      ? SequenceDiagram.normalizeMermaid(preprocessed.text)
+      ? SequenceDiagram.normalize(preprocessed.text)
       : kind === "class"
-        ? ClassDiagram.normalizeMermaid(preprocessed.text)
-        : Flowchart.normalizeMermaid(preprocessed.text);
+        ? ClassDiagram.normalize(preprocessed.text)
+        : Flowchart.normalize(preprocessed.text);
   const validation = validate(normalized.text);
 
   if (validation.ok) {

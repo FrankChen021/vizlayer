@@ -26,8 +26,8 @@ export class SequenceDiagram {
     return lines.join("\n");
   }
 
-  static normalizeMermaid(input: string) {
-    const next = input
+  static normalize(mermaidInput: string) {
+    const next = mermaidInput
       .split("\n")
       .map((line) => {
         const quoted = quoteSequenceAliasLabel(line);
@@ -38,7 +38,7 @@ export class SequenceDiagram {
     const fixes: FixRecord[] = [];
 
     if (
-      input.split("\n").some((line, index) => {
+      mermaidInput.split("\n").some((line, index) => {
         const after = next.split("\n")[index];
         return quoteSequenceAliasLabel(line) !== line && after !== line;
       })
@@ -52,7 +52,7 @@ export class SequenceDiagram {
     }
 
     if (
-      input.split("\n").some((line, index) => {
+      mermaidInput.split("\n").some((line, index) => {
         const after = next.split("\n")[index];
         return escapeSequenceMessageSemicolons(line) !== line && after !== line;
       })
@@ -70,8 +70,8 @@ export class SequenceDiagram {
     };
   }
 
-  static validateMermaid(input: string): Diagnostic[] {
-    const lines = input.split("\n").map((line) => line.trim());
+  static validate(mermaidInput: string): Diagnostic[] {
+    const lines = mermaidInput.split("\n").map((line) => line.trim());
     const hasHeader = lines[0] === "sequenceDiagram";
     if (!hasHeader) {
       return [
@@ -100,7 +100,11 @@ export class SequenceDiagram {
 }
 
 function escapeSequenceLabel(label: string) {
-  return label.replaceAll('"', '\\"');
+  return label
+    .replaceAll("\r\n", "<br/>")
+    .replaceAll("\n", "<br/>")
+    .replaceAll(/(?<!#59);/g, "#59;")
+    .replaceAll('"', '\\"');
 }
 
 function quoteSequenceAliasLabel(line: string) {
@@ -114,7 +118,7 @@ function quoteSequenceAliasLabel(line: string) {
   if (
     trimmedLabel.length === 0 ||
     (trimmedLabel.startsWith('"') && trimmedLabel.endsWith('"')) ||
-    !/[()/:;]/.test(trimmedLabel)
+    (!/[()/:;]/.test(trimmedLabel) && trimmedLabel.toLowerCase() !== "end")
   ) {
     return line;
   }

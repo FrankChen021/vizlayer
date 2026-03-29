@@ -45,7 +45,7 @@ pnpm build
 
 When publishing a fix or release, bump the package versions first.
 
-For coordinated releases of `@vizlayer/core` and `@vizlayer/react`, keep them in sync and ensure `@vizlayer/react` depends on a real semver range such as `^0.1.2` for `@vizlayer/core`.
+For coordinated releases of `@vizlayer/core` and `@vizlayer/react`, keep them in sync and ensure `@vizlayer/react` depends on a real semver range such as `^0.1.3` for `@vizlayer/core`.
 
 Do not publish `@vizlayer/react` with `@vizlayer/core: "workspace:*"` in its package manifest, because downstream npm consumers cannot install that published artifact.
 

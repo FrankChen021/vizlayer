@@ -51,6 +51,37 @@ describe("sequenceDiagram", () => {
     expect(result).toContain("user->>engine: generate diagram");
   });
 
+  it("escapes semicolons and line breaks in direct JSON generation", () => {
+    const result = SequenceDiagram.fromJson({
+      participants: [
+        { id: "api", label: "API" },
+        { id: "user", label: "User" },
+      ],
+      messages: [
+        {
+          from: "user",
+          to: "api",
+          text: "retry; fallback\nshow warning",
+        },
+      ],
+    });
+
+    expect(result).toContain("user->>api: retry#59; fallback<br/>show warning");
+    expect(validate(result).ok).toBe(true);
+  });
+
+  it("repairs lowercase end aliases that Mermaid treats as reserved", () => {
+    const result = repair(
+      `sequenceDiagram\nparticipant done as end\nUser->>done: finished`
+    );
+
+    expect(result.ok).toBe(true);
+    expect(result.mermaid).toContain('participant done as "end"');
+    expect(result.fixes.map((fix) => fix.code)).toContain(
+      "QUOTE_SEQUENCE_ALIAS_LABEL"
+    );
+  });
+
   it("validates rendered Mermaid", () => {
     expect(validate(SequenceDiagram.fromJson(sequenceDiagramDocument)).ok).toBe(
       true

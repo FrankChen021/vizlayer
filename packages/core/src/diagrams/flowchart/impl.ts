@@ -26,18 +26,18 @@ export class Flowchart {
     return lines.join("\n");
   }
 
-  static normalizeMermaid(input: string) {
+  static normalize(mermaidInput: string) {
     const fixes: FixRecord[] = [];
 
     return {
-      text: input,
+      text: mermaidInput,
       fixes,
     };
   }
 
-  static validateMermaid(input: string): Diagnostic[] {
+  static validate(mermaidInput: string): Diagnostic[] {
     const hasHeader =
-      input.startsWith("flowchart") || input.startsWith("graph ");
+      mermaidInput.startsWith("flowchart") || mermaidInput.startsWith("graph ");
     if (!hasHeader) {
       return [
         {
@@ -47,7 +47,7 @@ export class Flowchart {
       ];
     }
 
-    const hasBody = input
+    const hasBody = mermaidInput
       .split("\n")
       .slice(1)
       .some((line) => line.trim().length > 0);
@@ -74,11 +74,12 @@ function escapeEdgeLabel(label: string) {
 
 function sanitizeLabel(label: string) {
   return label
-    .replaceAll("\\", "\\\\")
-    .replaceAll("[", "(")
-    .replaceAll("]", ")")
+    .replaceAll("[", "&#91;")
+    .replaceAll("]", "&#93;")
     .replaceAll("(", "&#40;")
     .replaceAll(")", "&#41;")
+    .replaceAll("{", "&#123;")
+    .replaceAll("}", "&#125;")
     .replaceAll("\r\n", "<br/>")
     .replaceAll("\n", "<br/>");
 }

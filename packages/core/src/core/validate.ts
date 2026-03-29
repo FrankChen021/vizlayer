@@ -39,12 +39,12 @@ function buildDiagnostics(
   }
 
   if (kind === "sequence") {
-    return SequenceDiagram.validateMermaid(input);
+    return SequenceDiagram.validate(input);
   }
 
   if (kind === "class") {
-    return ClassDiagram.validateMermaid(input);
+    return ClassDiagram.validate(input);
   }
 
-  return Flowchart.validateMermaid(input);
+  return Flowchart.validate(input);
 }

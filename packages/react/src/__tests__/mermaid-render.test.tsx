@@ -4,7 +4,7 @@
 
 import mermaid from "mermaid";
 import { describe, expect, it } from "vitest";
-import { Flowchart } from "../../../core/src/index";
+import { Flowchart, SequenceDiagram } from "../../../core/src/index";
 
 const unknownTableRootCauseFlowchart = {
   direction: "TD" as const,
@@ -42,15 +42,20 @@ const unknownTableRootCauseFlowchart = {
   ],
 };
 
+function ensureSvgGetBBox() {
+  const svgElementPrototype = SVGElement.prototype as SVGElementPrototypeWithGetBBox;
+  svgElementPrototype.getBBox ??= () =>
+    ({
+      x: 0,
+      y: 0,
+      width: 160,
+      height: 40,
+    }) as DOMRect;
+}
+
 describe("Mermaid integration", () => {
   it("renders escaped flowchart labels from LLM-generated Vizlayer JSON", async () => {
-    SVGElement.prototype.getBBox ??= () =>
-      ({
-        x: 0,
-        y: 0,
-        width: 160,
-        height: 40,
-      }) as DOMRect;
+    ensureSvgGetBBox();
 
     mermaid.initialize({
       startOnLoad: false,
@@ -69,4 +74,62 @@ describe("Mermaid integration", () => {
       'throw["throw Exception&#40;ErrorCodes::UNKNOWN_TABLE&#41;"]'
     );
   });
+
+  it("renders flowcharts with reserved words and bracketed labels", async () => {
+    ensureSvgGetBBox();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "default",
+    });
+
+    const chart = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [
+        { id: "finish", label: "end" },
+        { id: "array_access", label: "array[i]" },
+      ],
+      edges: [{ from: "finish", to: "array_access", label: "read value" }],
+    });
+
+    const result = await mermaid.render("flowchart-reserved-labels", chart);
+
+    expect(result.svg).toContain("<svg");
+    expect(chart).toContain('finish["end"]');
+    expect(chart).toContain('array_access["array&#91;i&#93;"]');
+  });
+
+  it("renders sequence diagrams with semicolons and multiline messages", async () => {
+    ensureSvgGetBBox();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "default",
+    });
+
+    const chart = SequenceDiagram.fromJson({
+      participants: [
+        { id: "api", label: "API" },
+        { id: "user", label: "User" },
+      ],
+      messages: [
+        {
+          from: "user",
+          to: "api",
+          text: "retry; fallback\nshow warning",
+        },
+      ],
+    });
+
+    const result = await mermaid.render("sequence-message-escaping", chart);
+
+    expect(result.svg).toContain("<svg");
+    expect(chart).toContain("user->>api: retry#59; fallback<br/>show warning");
+  });
 });
+
+type SVGElementPrototypeWithGetBBox = typeof SVGElement.prototype & {
+  getBBox?: () => DOMRect;
+};

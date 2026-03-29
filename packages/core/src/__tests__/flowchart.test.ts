@@ -79,4 +79,27 @@ describe("flowchart", () => {
     );
     expect(validate(result).ok).toBe(true);
   });
+
+  it("preserves square brackets in labels instead of rewriting their meaning", () => {
+    const result = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [{ id: "array_access", label: "array[i]" }],
+      edges: [],
+    });
+
+    expect(result).toContain('array_access["array&#91;i&#93;"]');
+    expect(result).not.toContain('array_access["array(i)"]');
+    expect(validate(result).ok).toBe(true);
+  });
+
+  it("renders lowercase end safely inside quoted labels", () => {
+    const result = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [{ id: "finish", label: "end" }],
+      edges: [],
+    });
+
+    expect(result).toContain('finish["end"]');
+    expect(validate(result).ok).toBe(true);
+  });
 });

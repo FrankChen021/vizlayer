@@ -28,17 +28,17 @@ export class ClassDiagram {
     return lines.join("\n");
   }
 
-  static normalizeMermaid(input: string) {
+  static normalize(mermaidInput: string) {
     const fixes: FixRecord[] = [];
 
     return {
-      text: input,
+      text: mermaidInput,
       fixes,
     };
   }
 
-  static validateMermaid(input: string): Diagnostic[] {
-    const lines = input.split("\n").map((line) => line.trim());
+  static validate(mermaidInput: string): Diagnostic[] {
+    const lines = mermaidInput.split("\n").map((line) => line.trim());
     const hasHeader = lines[0] === "classDiagram";
     if (!hasHeader) {
       return [
