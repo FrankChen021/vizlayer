@@ -252,7 +252,7 @@ function SequenceDemoPage() {
 
       <div className="stack">
         <h3>Preview</h3>
-        <VizlayerDiagram kind="sequence" document={sequenceDocument} />
+        <VizlayerDiagram kind="sequenceDiagram" document={sequenceDocument} />
       </div>
     </section>
   );
@@ -281,7 +281,7 @@ function ClassDiagramDemoPage() {
 
       <div className="stack">
         <h3>Preview</h3>
-        <VizlayerDiagram kind="class" document={classDocument} />
+        <VizlayerDiagram kind="classDiagram" document={classDocument} />
       </div>
     </section>
   );
