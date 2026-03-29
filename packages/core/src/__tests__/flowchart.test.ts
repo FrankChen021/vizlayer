@@ -56,6 +56,7 @@ describe("flowchart", () => {
   it("renders from structured JSON", () => {
     const result = Flowchart.fromJson(flowchartDocument);
 
+    expect(result).toContain('title: "Basic flow"');
     expect(result).toContain("flowchart LR");
     expect(result).toContain('user["User"]');
     expect(result).toContain("user --> |send spec| engine");
@@ -100,6 +101,18 @@ describe("flowchart", () => {
     });
 
     expect(result).toContain('finish["end"]');
+    expect(validate(result).ok).toBe(true);
+  });
+
+  it("normalizes multiline titles into Mermaid frontmatter", () => {
+    const result = Flowchart.fromJson({
+      title: "Root cause\nanalysis",
+      direction: "TD",
+      nodes: [{ id: "start", label: "Start" }],
+      edges: [],
+    });
+
+    expect(result).toContain('title: "Root cause analysis"');
     expect(validate(result).ok).toBe(true);
   });
 });

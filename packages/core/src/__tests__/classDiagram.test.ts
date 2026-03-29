@@ -31,4 +31,11 @@ describe("classDiagram", () => {
   it("validates rendered Mermaid", () => {
     expect(validate(ClassDiagram.fromJson(classDiagramDocument)).ok).toBe(true);
   });
+
+  it("returns a class-specific diagnostic code for empty diagrams", () => {
+    const result = validate("classDiagram");
+
+    expect(result.ok).toBe(false);
+    expect(result.diagnostics[0]?.code).toBe("MISSING_CLASS_CONTENT");
+  });
 });

@@ -1,7 +1,11 @@
 import { ClassDiagram } from "../diagrams/classDiagram/impl";
 import { Flowchart } from "../diagrams/flowchart/impl";
 import { SequenceDiagram } from "../diagrams/sequenceDiagram/impl";
-import { detectKind, preprocessInput } from "./normalize";
+import {
+  detectKind,
+  preprocessInput,
+  stripMermaidFrontmatter,
+} from "./normalize";
 import type { Diagnostic, ValidateResult, VisualizationKind } from "./types";
 
 export function validate(input: string): ValidateResult {
@@ -20,6 +24,8 @@ function buildDiagnostics(
   input: string,
   kind: VisualizationKind
 ): Diagnostic[] {
+  const diagramInput = stripMermaidFrontmatter(input);
+
   if (input.length === 0) {
     return [
       {
@@ -39,12 +45,12 @@ function buildDiagnostics(
   }
 
   if (kind === "sequence") {
-    return SequenceDiagram.validate(input);
+    return SequenceDiagram.validate(diagramInput);
   }
 
   if (kind === "class") {
-    return ClassDiagram.validate(input);
+    return ClassDiagram.validate(diagramInput);
   }
 
-  return Flowchart.validate(input);
+  return Flowchart.validate(diagramInput);
 }

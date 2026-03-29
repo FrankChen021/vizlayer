@@ -1,7 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MermaidDiagram } from "../components/MermaidDiagram";
-import { toChartSpec, VizlayerDiagram } from "../index";
+import {
+  MermaidDiagram,
+  toChartSpec,
+  VizlayerDiagram,
+  type MermaidDiagramProps,
+} from "../index";
 
 vi.mock("mermaid", () => ({
   default: {
@@ -140,5 +144,13 @@ describe("@vizlayer/react", () => {
     expect(chart).toContain("sequenceDiagram");
     expect(chart).toContain('participant engine as "Vizlayer Engine"');
     expect(chart).toContain("user->>engine: draw sequence");
+  });
+
+  it("exports MermaidDiagram props from the package root", () => {
+    const props: MermaidDiagramProps = {
+      chart: "flowchart TD\n  a[A]",
+    };
+
+    expect(props.chart).toContain("flowchart TD");
   });
 });

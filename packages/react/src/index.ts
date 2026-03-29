@@ -1,4 +1,8 @@
 export {
+  MermaidDiagram,
+  type MermaidDiagramProps,
+} from "./components/MermaidDiagram";
+export {
   toChartSpec,
   VizlayerDiagram,
   type VizlayerDiagramProps,

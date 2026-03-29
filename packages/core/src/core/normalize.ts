@@ -29,7 +29,7 @@ export function preprocessInput(input: string) {
 }
 
 export function detectKind(input: string): VisualizationKind {
-  const firstMeaningfulLine = input
+  const firstMeaningfulLine = stripMermaidFrontmatter(input)
     .split("\n")
     .map((line) => line.trim())
     .find((line) => line.length > 0 && !line.startsWith("%%"));
@@ -54,6 +54,24 @@ export function detectKind(input: string): VisualizationKind {
   }
 
   return "unknown";
+}
+
+export function stripMermaidFrontmatter(input: string) {
+  const lines = input.split("\n");
+  if (lines[0]?.trim() !== "---") {
+    return input;
+  }
+
+  for (let index = 1; index < lines.length; index += 1) {
+    if (lines[index]?.trim() === "---") {
+      return lines
+        .slice(index + 1)
+        .join("\n")
+        .trimStart();
+    }
+  }
+
+  return input;
 }
 
 function unwrapMarkdownFence(input: string) {

@@ -1,3 +1,4 @@
+import { stripMermaidFrontmatter } from "../../core/normalize";
 import type { Diagnostic, FixRecord } from "../../core/types";
 import type { FlowchartDocument } from "./types";
 
@@ -12,7 +13,10 @@ export class Flowchart {
     }
 
     const direction = input.direction ?? "TD";
-    const lines = [`flowchart ${direction}`];
+    const lines = input.title
+      ? ["---", `title: ${JSON.stringify(normalizeTitle(input.title))}`, "---"]
+      : [];
+    lines.push(`flowchart ${direction}`);
 
     for (const node of input.nodes) {
       lines.push(`  ${node.id}["${escapeNodeLabel(node.label)}"]`);
@@ -36,8 +40,10 @@ export class Flowchart {
   }
 
   static validate(mermaidInput: string): Diagnostic[] {
+    const normalizedInput = stripMermaidFrontmatter(mermaidInput);
     const hasHeader =
-      mermaidInput.startsWith("flowchart") || mermaidInput.startsWith("graph ");
+      normalizedInput.startsWith("flowchart") ||
+      normalizedInput.startsWith("graph ");
     if (!hasHeader) {
       return [
         {
@@ -47,7 +53,7 @@ export class Flowchart {
       ];
     }
 
-    const hasBody = mermaidInput
+    const hasBody = normalizedInput
       .split("\n")
       .slice(1)
       .some((line) => line.trim().length > 0);
@@ -82,4 +88,8 @@ function sanitizeLabel(label: string) {
     .replaceAll("}", "&#125;")
     .replaceAll("\r\n", "<br/>")
     .replaceAll("\n", "<br/>");
+}
+
+function normalizeTitle(title: string) {
+  return title.replaceAll("\r\n", " ").replaceAll("\n", " ").trim();
 }

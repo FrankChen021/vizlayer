@@ -101,6 +101,27 @@ describe("Mermaid integration", () => {
     expect(chart).toContain('array_access["array&#91;i&#93;"]');
   });
 
+  it("renders flowcharts with Mermaid title frontmatter", async () => {
+    ensureSvgGetBBox();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "default",
+    });
+
+    const chart = Flowchart.fromJson({
+      title: "Unknown table root cause",
+      direction: "TD",
+      nodes: [{ id: "start", label: "Start" }],
+      edges: [],
+    });
+    const result = await mermaid.render("flowchart-with-title", chart);
+
+    expect(result.svg).toContain("<svg");
+    expect(chart).toContain('title: "Unknown table root cause"');
+  });
+
   it("renders sequence diagrams with semicolons and multiline messages", async () => {
     ensureSvgGetBBox();
 

@@ -2,8 +2,9 @@
 name: vizlayer
 description: Produce valid JSON documents for mermaid flowchart, sequenceDiagram, and classDiagram diagrams. Use when an AI system needs to turn natural-language structure into mermaid diagram input, Mermaid-safe JSON, or typed visualization payloads.
 metadata:
-  author: System
+  author: Vizlayer
   disable-slash-command: true
+  url: https://github.com/FrankChen021/vizlayer
 ---
 
 # Vizlayer JSON Authoring

@@ -5,7 +5,8 @@ export type DiagnosticCode =
   | "UNKNOWN_KIND"
   | "MISSING_HEADER"
   | "MISSING_SEQUENCE_INTERACTION"
-  | "MISSING_FLOW_CONTENT";
+  | "MISSING_FLOW_CONTENT"
+  | "MISSING_CLASS_CONTENT";
 
 export type FixCode =
   | "UNWRAP_MARKDOWN_FENCE"
@@ -18,7 +19,8 @@ export type ResidualCode =
   | "UNKNOWN_KIND"
   | "MISSING_HEADER"
   | "MISSING_SEQUENCE_INTERACTION"
-  | "MISSING_FLOW_CONTENT";
+  | "MISSING_FLOW_CONTENT"
+  | "MISSING_CLASS_CONTENT";
 
 export interface Diagnostic {
   code: DiagnosticCode;

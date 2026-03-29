@@ -1,3 +1,4 @@
+import { stripMermaidFrontmatter } from "../../core/normalize";
 import type { Diagnostic, FixRecord } from "../../core/types";
 import type { SequenceDiagramDocument } from "./types";
 
@@ -71,7 +72,9 @@ export class SequenceDiagram {
   }
 
   static validate(mermaidInput: string): Diagnostic[] {
-    const lines = mermaidInput.split("\n").map((line) => line.trim());
+    const lines = stripMermaidFrontmatter(mermaidInput)
+      .split("\n")
+      .map((line) => line.trim());
     const hasHeader = lines[0] === "sequenceDiagram";
     if (!hasHeader) {
       return [

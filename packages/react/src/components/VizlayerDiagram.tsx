@@ -4,7 +4,7 @@ import {
   SequenceDiagram,
   type VizlayerPayload,
 } from "@vizlayer/core";
-import { useMemo, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { MermaidDiagram, type MermaidDiagramProps } from "./MermaidDiagram";
 
 type SharedDiagramProps = Omit<MermaidDiagramProps, "chart"> & {
@@ -24,22 +24,7 @@ type BuildChartResult =
     };
 
 export function VizlayerDiagram(props: VizlayerDiagramProps) {
-  const chart = useMemo<BuildChartResult>(() => {
-    try {
-      return {
-        chart: toChartSpec(props),
-        error: null,
-      };
-    } catch (error) {
-      return {
-        chart: null,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to build Mermaid from diagram JSON.",
-      };
-    }
-  }, [props]);
+  const chart = buildChartSpec(props);
 
   if (chart.error) {
     if (typeof props.invalidDocumentFallback === "function") {
@@ -79,4 +64,21 @@ export function toChartSpec(props: VizlayerPayload) {
   }
 
   return ClassDiagram.fromJson(props.document);
+}
+
+function buildChartSpec(props: VizlayerPayload): BuildChartResult {
+  try {
+    return {
+      chart: toChartSpec(props),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      chart: null,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to build Mermaid from diagram JSON.",
+    };
+  }
 }

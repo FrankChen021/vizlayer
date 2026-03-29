@@ -1,3 +1,4 @@
+import { stripMermaidFrontmatter } from "../../core/normalize";
 import type { ClassDiagramDocument } from "./types";
 
 import type { Diagnostic, FixRecord } from "../../core/types";
@@ -38,7 +39,9 @@ export class ClassDiagram {
   }
 
   static validate(mermaidInput: string): Diagnostic[] {
-    const lines = mermaidInput.split("\n").map((line) => line.trim());
+    const lines = stripMermaidFrontmatter(mermaidInput)
+      .split("\n")
+      .map((line) => line.trim());
     const hasHeader = lines[0] === "classDiagram";
     if (!hasHeader) {
       return [
@@ -53,7 +56,7 @@ export class ClassDiagram {
     if (!hasClassBody) {
       return [
         {
-          code: "MISSING_FLOW_CONTENT",
+          code: "MISSING_CLASS_CONTENT",
           message: "Class diagrams must define at least one class.",
         },
       ];

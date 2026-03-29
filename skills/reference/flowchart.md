@@ -8,6 +8,7 @@ Use this reference when the requested structure is directional: pipelines, branc
 {
   "kind": "flowchart",
   "document": {
+    "title": "Vizlayer request pipeline",
     "direction": "LR",
     "nodes": [
       { "id": "user", "label": "User" },
@@ -23,11 +24,13 @@ Use this reference when the requested structure is directional: pipelines, branc
 - `nodes` must be non-empty.
 - Every node needs `id` and `label`.
 - Every edge needs `from` and `to`.
+- `title` is optional, but when present it should be a short non-empty string.
 - `direction` should be one of `TB`, `TD`, `LR`, `RL`, `BT`.
 
 ## Authoring Guidance
 
 - Use short, stable IDs like `user`, `engine`, `artifact`.
+- Use `title` when the diagram benefits from a clear heading.
 - Put human-readable text in `label`, not `id`.
 - Use `edges[].label` only when the transition meaning matters.
 - Prefer `LR` for left-to-right process diagrams and `TD` or `TB` for top-down flows.
