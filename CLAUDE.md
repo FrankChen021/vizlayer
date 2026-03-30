@@ -22,9 +22,16 @@ Vizlayer is a structured visualization engine for AI systems.
 - `pnpm lint`
 - `pnpm test`
 - `pnpm typecheck`
+- `pnpm format`
+- `pnpm format:check`
 
 ## Testing
 
 - Use `vitest` for both library and app-level tests when practical.
 - Favor fixture-based tests for library transformations and parsing logic.
 - Add focused regression tests whenever behavior changes.
+
+## Release Checks
+
+- Before pushing, run `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Before publishing packages, make sure the lockfile matches the package manifests and `pnpm format:check` passes.
