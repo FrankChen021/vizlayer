@@ -13,6 +13,6 @@ export type {
   FlowchartDocument,
   ParsedVizlayerSpec,
   SequenceDiagramDocument,
-  VizlayerPayload,
+  VizlayerSpec,
 } from "@vizlayer/core";
-export { VizlayerSpecParser } from "@vizlayer/core";
+export { Vizlayer } from "@vizlayer/core";

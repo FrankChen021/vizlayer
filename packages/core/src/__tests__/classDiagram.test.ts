@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ClassDiagram, validate } from "../index";
+import { ClassDiagram, Vizlayer } from "../index";
 import type { ClassDiagramDocument } from "../diagrams/classDiagram/types";
 
 const classDiagramDocument: ClassDiagramDocument = {
@@ -29,11 +29,13 @@ describe("classDiagram", () => {
   });
 
   it("validates rendered Mermaid", () => {
-    expect(validate(ClassDiagram.fromJson(classDiagramDocument)).ok).toBe(true);
+    expect(
+      Vizlayer.validate(ClassDiagram.fromJson(classDiagramDocument)).ok
+    ).toBe(true);
   });
 
   it("returns a class-specific diagnostic code for empty diagrams", () => {
-    const result = validate("classDiagram");
+    const result = Vizlayer.validate("classDiagram");
 
     expect(result.ok).toBe(false);
     expect(result.diagnostics[0]?.code).toBe("MISSING_CLASS_CONTENT");

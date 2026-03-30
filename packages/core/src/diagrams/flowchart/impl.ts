@@ -2,6 +2,8 @@ import { stripMermaidFrontmatter } from "../../core/normalize";
 import type { Diagnostic, FixRecord } from "../../core/types";
 import type { FlowchartDocument } from "./types";
 
+const FLOWCHART_DIRECTIONS = new Set(["TB", "TD", "LR", "RL", "BT"]);
+
 export class Flowchart {
   static fromJson(input: FlowchartDocument, kind: "flowchart" = "flowchart") {
     if (kind !== "flowchart") {
@@ -68,6 +70,68 @@ export class Flowchart {
 
     return [];
   }
+
+  static validateDocument(document: Record<string, unknown>) {
+    if (document.title !== undefined && !isNonEmptyString(document.title)) {
+      return "Flowchart documents must use a non-empty string `title` when provided.";
+    }
+
+    if (
+      document.direction !== undefined &&
+      !FLOWCHART_DIRECTIONS.has(document.direction as string)
+    ) {
+      return "Flowchart documents must use `direction` set to `TB`, `TD`, `LR`, `RL`, or `BT`.";
+    }
+
+    if (!Array.isArray(document.nodes) || document.nodes.length === 0) {
+      return "Flowchart documents must include a non-empty `nodes` array.";
+    }
+
+    if (!Array.isArray(document.edges)) {
+      return "Flowchart documents must include an `edges` array.";
+    }
+
+    const nodeIds = new Set<string>();
+    for (const [index, node] of document.nodes.entries()) {
+      if (!isRecord(node)) {
+        return `Flowchart node at index ${index} must be an object.`;
+      }
+
+      if (!isNonEmptyString(node.id)) {
+        return `Flowchart node at index ${index} must include a non-empty string \`id\`.`;
+      }
+
+      if (!isNonEmptyString(node.label)) {
+        return `Flowchart node \`${node.id}\` must include a non-empty string \`label\`.`;
+      }
+
+      if (nodeIds.has(node.id)) {
+        return `Flowchart node IDs must be unique. Duplicate ID \`${node.id}\` was provided.`;
+      }
+
+      nodeIds.add(node.id);
+    }
+
+    for (const [index, edge] of document.edges.entries()) {
+      if (!isRecord(edge)) {
+        return `Flowchart edge at index ${index} must be an object.`;
+      }
+
+      if (!isNonEmptyString(edge.from) || !isNonEmptyString(edge.to)) {
+        return `Flowchart edge at index ${index} must include non-empty string \`from\` and \`to\` fields.`;
+      }
+
+      if (edge.label !== undefined && !isNonEmptyString(edge.label)) {
+        return `Flowchart edge ${edge.from} -> ${edge.to} must use a non-empty string \`label\` when provided.`;
+      }
+
+      if (!nodeIds.has(edge.from) || !nodeIds.has(edge.to)) {
+        return `Flowchart edge ${edge.from} -> ${edge.to} must reference declared node IDs.`;
+      }
+    }
+
+    return null;
+  }
 }
 
 function escapeNodeLabel(label: string) {
@@ -92,4 +156,12 @@ function sanitizeLabel(label: string) {
 
 function normalizeTitle(title: string) {
   return title.replaceAll("\r\n", " ").replaceAll("\n", " ").trim();
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
 }

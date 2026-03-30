@@ -1,7 +1,9 @@
 {
   "name": "@vizlayer/core",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "type": "module",
+  "description": "Core Vizlayer APIs for typed diagram payloads, Mermaid generation, validation, and repair.",
+  "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +14,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { repair, SequenceDiagram, validate } from "../index";
+import { SequenceDiagram, Vizlayer } from "../index";
 import type { SequenceDiagramDocument } from "../diagrams/sequenceDiagram/types";
 
 const brokenSequenceAlias = {
@@ -24,7 +24,7 @@ const sequenceDiagramDocument: SequenceDiagramDocument = {
 
 describe("sequenceDiagram", () => {
   it("repairs common Mermaid issues", () => {
-    const result = repair(brokenSequenceAlias.input);
+    const result = Vizlayer.repair(brokenSequenceAlias.input);
 
     expect(result.ok).toBe(true);
     expect(result.mermaid).toBe(brokenSequenceAlias.expectedMermaid);
@@ -35,8 +35,8 @@ describe("sequenceDiagram", () => {
   });
 
   it("is idempotent once repaired", () => {
-    const first = repair(brokenSequenceAlias.input);
-    const second = repair(first.mermaid);
+    const first = Vizlayer.repair(brokenSequenceAlias.input);
+    const second = Vizlayer.repair(first.mermaid);
 
     expect(second.ok).toBe(true);
     expect(second.mermaid).toBe(first.mermaid);
@@ -67,11 +67,11 @@ describe("sequenceDiagram", () => {
     });
 
     expect(result).toContain("user->>api: retry#59; fallback<br/>show warning");
-    expect(validate(result).ok).toBe(true);
+    expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
   it("repairs lowercase end aliases that Mermaid treats as reserved", () => {
-    const result = repair(
+    const result = Vizlayer.repair(
       `sequenceDiagram\nparticipant done as end\nUser->>done: finished`
     );
 
@@ -83,8 +83,8 @@ describe("sequenceDiagram", () => {
   });
 
   it("validates rendered Mermaid", () => {
-    expect(validate(SequenceDiagram.fromJson(sequenceDiagramDocument)).ok).toBe(
-      true
-    );
+    expect(
+      Vizlayer.validate(SequenceDiagram.fromJson(sequenceDiagramDocument)).ok
+    ).toBe(true);
   });
 });

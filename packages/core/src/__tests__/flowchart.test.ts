@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Flowchart, validate } from "../index";
+import { Flowchart, Vizlayer } from "../index";
 import type { FlowchartDocument } from "../diagrams/flowchart/types";
 
 const flowchartDocument: FlowchartDocument = {
@@ -63,7 +63,9 @@ describe("flowchart", () => {
   });
 
   it("validates rendered Mermaid", () => {
-    expect(validate(Flowchart.fromJson(flowchartDocument)).ok).toBe(true);
+    expect(Vizlayer.validate(Flowchart.fromJson(flowchartDocument)).ok).toBe(
+      true
+    );
   });
 
   it("escapes LLM-generated labels into Mermaid-safe quoted nodes", () => {
@@ -78,7 +80,7 @@ describe("flowchart", () => {
     expect(result).toContain(
       "missing --> |UNKNOWN_TABLE &#40;code 60&#41;| throw"
     );
-    expect(validate(result).ok).toBe(true);
+    expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
   it("preserves square brackets in labels instead of rewriting their meaning", () => {
@@ -90,7 +92,7 @@ describe("flowchart", () => {
 
     expect(result).toContain('array_access["array&#91;i&#93;"]');
     expect(result).not.toContain('array_access["array(i)"]');
-    expect(validate(result).ok).toBe(true);
+    expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
   it("renders lowercase end safely inside quoted labels", () => {
@@ -101,7 +103,7 @@ describe("flowchart", () => {
     });
 
     expect(result).toContain('finish["end"]');
-    expect(validate(result).ok).toBe(true);
+    expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
   it("normalizes multiline titles into Mermaid frontmatter", () => {
@@ -113,6 +115,6 @@ describe("flowchart", () => {
     });
 
     expect(result).toContain('title: "Root cause analysis"');
-    expect(validate(result).ok).toBe(true);
+    expect(Vizlayer.validate(result).ok).toBe(true);
   });
 });

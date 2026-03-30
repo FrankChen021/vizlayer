@@ -1,10 +1,8 @@
 import {
   ClassDiagram as ClassDiagramModel,
-  explain,
   Flowchart,
-  repair,
   SequenceDiagram as SequenceDiagramModel,
-  validate,
+  Vizlayer,
   type ClassDiagramDocument,
   type FlowchartDocument,
   type SequenceDiagramDocument,
@@ -149,8 +147,8 @@ function OverviewPage() {
 
 function RepairDemoPage() {
   const [input, setInput] = useState(brokenSequence);
-  const result = useMemo(() => repair(input), [input]);
-  const diagnostics = useMemo(() => validate(input), [input]);
+  const result = useMemo(() => Vizlayer.repair(input), [input]);
+  const diagnostics = useMemo(() => Vizlayer.validate(input), [input]);
 
   return (
     <section className="stack">
@@ -177,7 +175,7 @@ function RepairDemoPage() {
 
           <div className="panel">
             <h3>Explanation</h3>
-            <pre>{explain(result)}</pre>
+            <pre>{Vizlayer.explain(result)}</pre>
           </div>
         </div>
       </div>

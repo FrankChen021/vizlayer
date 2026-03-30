@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Structured visualization engine for AI systems.",
+  "license": "Apache-2.0",
   "packageManager": "pnpm@10.18.0",
   "scripts": {
     "dev": "turbo run dev --parallel",

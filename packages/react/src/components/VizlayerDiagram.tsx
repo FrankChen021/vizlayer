@@ -2,7 +2,7 @@ import {
   ClassDiagram,
   Flowchart,
   SequenceDiagram,
-  type VizlayerPayload,
+  type VizlayerSpec,
 } from "@vizlayer/core";
 import type { ReactNode } from "react";
 import { MermaidDiagram, type MermaidDiagramProps } from "./MermaidDiagram";
@@ -11,7 +11,7 @@ type SharedDiagramProps = Omit<MermaidDiagramProps, "chart"> & {
   invalidDocumentFallback?: ReactNode | ((message: string) => ReactNode);
 };
 
-export type VizlayerDiagramProps = VizlayerPayload & SharedDiagramProps;
+export type VizlayerDiagramProps = VizlayerSpec & SharedDiagramProps;
 
 type BuildChartResult =
   | {
@@ -54,7 +54,7 @@ export function VizlayerDiagram(props: VizlayerDiagramProps) {
   );
 }
 
-export function toChartSpec(props: VizlayerPayload) {
+export function toChartSpec(props: VizlayerSpec) {
   if (props.kind === "flowchart") {
     return Flowchart.fromJson(props.document);
   }
@@ -66,7 +66,7 @@ export function toChartSpec(props: VizlayerPayload) {
   return ClassDiagram.fromJson(props.document);
 }
 
-function buildChartSpec(props: VizlayerPayload): BuildChartResult {
+function buildChartSpec(props: VizlayerSpec): BuildChartResult {
   try {
     return {
       chart: toChartSpec(props),

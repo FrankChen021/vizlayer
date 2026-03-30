@@ -100,6 +100,66 @@ export class SequenceDiagram {
 
     return [];
   }
+
+  static validateDocument(document: Record<string, unknown>) {
+    if (
+      !Array.isArray(document.participants) ||
+      document.participants.length === 0
+    ) {
+      return "Sequence documents must include a non-empty `participants` array.";
+    }
+
+    if (!Array.isArray(document.messages) || document.messages.length === 0) {
+      return "Sequence documents must include a non-empty `messages` array.";
+    }
+
+    const participantIds = new Set<string>();
+    for (const [index, participant] of document.participants.entries()) {
+      if (!isRecord(participant)) {
+        return `Sequence participant at index ${index} must be an object.`;
+      }
+
+      if (!isNonEmptyString(participant.id)) {
+        return `Sequence participant at index ${index} must include a non-empty string \`id\`.`;
+      }
+
+      if (
+        participant.label !== undefined &&
+        !isNonEmptyString(participant.label)
+      ) {
+        return `Sequence participant \`${participant.id}\` must use a non-empty string \`label\` when provided.`;
+      }
+
+      if (participantIds.has(participant.id)) {
+        return `Sequence participant IDs must be unique. Duplicate ID \`${participant.id}\` was provided.`;
+      }
+
+      participantIds.add(participant.id);
+    }
+
+    for (const [index, message] of document.messages.entries()) {
+      if (!isRecord(message)) {
+        return `Sequence message at index ${index} must be an object.`;
+      }
+
+      if (
+        !isNonEmptyString(message.from) ||
+        !isNonEmptyString(message.to) ||
+        !isNonEmptyString(message.text)
+      ) {
+        return `Sequence message at index ${index} must include non-empty string \`from\`, \`to\`, and \`text\` fields.`;
+      }
+
+      if (
+        !participantIds.has(message.from) ||
+        !participantIds.has(message.to)
+      ) {
+        return `Sequence message ${message.from} -> ${message.to} must reference declared participant IDs.`;
+      }
+    }
+
+    return null;
+  }
 }
 
 function escapeSequenceLabel(label: string) {
@@ -146,4 +206,12 @@ function escapeSequenceMessageSemicolons(line: string) {
   }
 
   return `${prefix}${body.replace(/(?<!#59);/g, "#59;")}`;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
 }

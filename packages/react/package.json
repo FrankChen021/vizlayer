@@ -1,7 +1,9 @@
 {
   "name": "@vizlayer/react",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "type": "module",
+  "description": "React components for rendering Vizlayer payloads and Mermaid charts.",
+  "license": "Apache-2.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +14,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",
@@ -25,7 +29,7 @@
     "react-dom": "^19.2.0"
   },
   "dependencies": {
-    "@vizlayer/core": "^0.1.9",
+    "@vizlayer/core": "^0.1.10",
     "mermaid": "^11.12.0"
   },
   "devDependencies": {
