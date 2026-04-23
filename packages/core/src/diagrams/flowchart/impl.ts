@@ -20,13 +20,21 @@ export class Flowchart {
       : [];
     lines.push(`flowchart ${direction}`);
 
+    const mermaidNodeIds = new Map(
+      input.nodes.map((node) => [node.id, toMermaidFlowchartId(node.id)])
+    );
+
     for (const node of input.nodes) {
-      lines.push(`  ${node.id}["${escapeNodeLabel(node.label)}"]`);
+      lines.push(
+        `  ${mermaidNodeIds.get(node.id)}["${escapeNodeLabel(node.label)}"]`
+      );
     }
 
     for (const edge of input.edges) {
       const label = edge.label ? `|${escapeEdgeLabel(edge.label)}| ` : "";
-      lines.push(`  ${edge.from} --> ${label}${edge.to}`);
+      lines.push(
+        `  ${mermaidNodeIds.get(edge.from)} --> ${label}${mermaidNodeIds.get(edge.to)}`
+      );
     }
 
     return lines.join("\n");
@@ -156,6 +164,15 @@ function sanitizeLabel(label: string) {
 
 function normalizeTitle(title: string) {
   return title.replaceAll("\r\n", " ").replaceAll("\n", " ").trim();
+}
+
+function toMermaidFlowchartId(id: string) {
+  const normalized = id.replaceAll(/[^A-Za-z0-9_]/g, "_");
+  const prefixed = /^[A-Za-z_]/.test(normalized)
+    ? normalized
+    : `node_${normalized}`;
+
+  return prefixed.toLowerCase() === "end" ? `node_${prefixed}` : prefixed;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
