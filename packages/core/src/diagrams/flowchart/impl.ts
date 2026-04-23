@@ -20,20 +20,18 @@ export class Flowchart {
       : [];
     lines.push(`flowchart ${direction}`);
 
-    const mermaidNodeIds = new Map(
-      input.nodes.map((node) => [node.id, toMermaidFlowchartId(node.id)])
-    );
+    const mermaidNodeIds = createMermaidNodeIds(input.nodes.map((node) => node.id));
 
     for (const node of input.nodes) {
       lines.push(
-        `  ${mermaidNodeIds.get(node.id)}["${escapeNodeLabel(node.label)}"]`
+        `  ${getMermaidNodeId(node.id, mermaidNodeIds)}["${escapeNodeLabel(node.label)}"]`
       );
     }
 
     for (const edge of input.edges) {
       const label = edge.label ? `|${escapeEdgeLabel(edge.label)}| ` : "";
       lines.push(
-        `  ${mermaidNodeIds.get(edge.from)} --> ${label}${mermaidNodeIds.get(edge.to)}`
+        `  ${getMermaidNodeId(edge.from, mermaidNodeIds)} --> ${label}${getMermaidNodeId(edge.to, mermaidNodeIds)}`
       );
     }
 
@@ -173,6 +171,36 @@ function toMermaidFlowchartId(id: string) {
     : `node_${normalized}`;
 
   return prefixed.toLowerCase() === "end" ? `node_${prefixed}` : prefixed;
+}
+
+function createMermaidNodeIds(nodeIds: string[]) {
+  const mermaidNodeIds = new Map<string, string>();
+  const usedAliases = new Set<string>();
+
+  for (const nodeId of nodeIds) {
+    const baseAlias = toMermaidFlowchartId(nodeId);
+    let alias = baseAlias;
+    let collisionIndex = 1;
+
+    while (usedAliases.has(alias)) {
+      alias = `${baseAlias}_${collisionIndex}`;
+      collisionIndex += 1;
+    }
+
+    mermaidNodeIds.set(nodeId, alias);
+    usedAliases.add(alias);
+  }
+
+  return mermaidNodeIds;
+}
+
+function getMermaidNodeId(nodeId: string, mermaidNodeIds: Map<string, string>) {
+  const alias = mermaidNodeIds.get(nodeId);
+  if (!alias) {
+    throw new Error(`UNKNOWN_FLOWCHART_NODE_ID:${nodeId}`);
+  }
+
+  return alias;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

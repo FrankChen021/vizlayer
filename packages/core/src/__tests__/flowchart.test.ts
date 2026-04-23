@@ -121,6 +121,35 @@ describe("flowchart", () => {
     expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
+  it("generates unique Mermaid aliases for colliding node ids", () => {
+    const result = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [
+        { id: "end", label: "End keyword" },
+        { id: "node_end", label: "Existing alias" },
+        { id: "a-b", label: "Dashed id" },
+        { id: "a_b", label: "Underscored id" },
+      ],
+      edges: [],
+    });
+
+    expect(result).toContain('node_end["End keyword"]');
+    expect(result).toContain('node_end_1["Existing alias"]');
+    expect(result).toContain('a_b["Dashed id"]');
+    expect(result).toContain('a_b_1["Underscored id"]');
+    expect(Vizlayer.validate(result).ok).toBe(true);
+  });
+
+  it("throws a clear error when an edge references an unknown node id", () => {
+    expect(() =>
+      Flowchart.fromJson({
+        direction: "TD",
+        nodes: [{ id: "start", label: "Start" }],
+        edges: [{ from: "start", to: "missing", label: "done" }],
+      })
+    ).toThrow("UNKNOWN_FLOWCHART_NODE_ID:missing");
+  });
+
   it("normalizes multiline titles into Mermaid frontmatter", () => {
     const result = Flowchart.fromJson({
       title: "Root cause\nanalysis",
