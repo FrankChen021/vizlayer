@@ -106,6 +106,21 @@ describe("flowchart", () => {
     expect(Vizlayer.validate(result).ok).toBe(true);
   });
 
+  it("aliases reserved Mermaid node ids like end", () => {
+    const result = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [
+        { id: "start", label: "Start" },
+        { id: "end", label: "Return final result set to client" },
+      ],
+      edges: [{ from: "start", to: "end", label: "done" }],
+    });
+
+    expect(result).toContain('node_end["Return final result set to client"]');
+    expect(result).toContain("start --> |done| node_end");
+    expect(Vizlayer.validate(result).ok).toBe(true);
+  });
+
   it("normalizes multiline titles into Mermaid frontmatter", () => {
     const result = Flowchart.fromJson({
       title: "Root cause\nanalysis",

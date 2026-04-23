@@ -101,6 +101,31 @@ describe("Mermaid integration", () => {
     expect(chart).toContain('array_access["array&#91;i&#93;"]');
   });
 
+  it("renders flowcharts when a node id is Mermaid-reserved", async () => {
+    ensureSvgGetBBox();
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "default",
+    });
+
+    const chart = Flowchart.fromJson({
+      direction: "TD",
+      nodes: [
+        { id: "start", label: "Start" },
+        { id: "end", label: "Return final result set to client" },
+      ],
+      edges: [{ from: "start", to: "end", label: "done" }],
+    });
+
+    const result = await mermaid.render("flowchart-reserved-node-id", chart);
+
+    expect(result.svg).toContain("<svg");
+    expect(chart).toContain('node_end["Return final result set to client"]');
+    expect(chart).toContain("start --> |done| node_end");
+  });
+
   it("renders flowcharts with Mermaid title frontmatter", async () => {
     ensureSvgGetBBox();
 
