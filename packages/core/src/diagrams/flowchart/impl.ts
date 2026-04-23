@@ -20,7 +20,9 @@ export class Flowchart {
       : [];
     lines.push(`flowchart ${direction}`);
 
-    const mermaidNodeIds = createMermaidNodeIds(input.nodes.map((node) => node.id));
+    const mermaidNodeIds = createMermaidNodeIds(
+      input.nodes.map((node) => node.id)
+    );
 
     for (const node of input.nodes) {
       lines.push(
